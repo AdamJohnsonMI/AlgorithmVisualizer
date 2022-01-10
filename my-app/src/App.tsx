@@ -5,6 +5,7 @@ import {useRef, useState } from "react";
 import TestSort from './Components/TestSort'
 
 
+
 export interface IMyData {
   num: number
 }
@@ -18,8 +19,6 @@ export default function App() {
       num: 1398
     }
   ]
-  
-  
   const [data, setData] = useState(numberData)
   const [numbers, setNumbers] = useState<string>()
   const textRef = useRef<HTMLInputElement>(null)
@@ -28,7 +27,6 @@ export default function App() {
 
 
   function getNumber(){
-    //console.log(textRef.current?.value)
     let newNumber = textRef.current?.value
     if (textRef.current?.value){
       let userNumber = textRef.current?.value
@@ -41,8 +39,8 @@ export default function App() {
   }
 
   function SetGraph(newNumber:any){
-    let newArray: IMyData[] = []
 
+    let newArray: IMyData[] = []
     for(let i =0; i< parseInt(newNumber); i++){
       newArray[i] = {num: Math.floor(Math.random() * 201)}
     }
@@ -50,14 +48,9 @@ export default function App() {
   }
 
   async function sortGraph(arr:IMyData[]){
-    //const copy = [...arr]
-    //console.log(copy)
-    //copy.sort(TestSort)
-    const copy = SelectionSort(arr)
-    setData(await copy); 
-    //console.log(copy[2].num)
-    
-    
+    console.log("Shouldnt see this")
+    //const copy = SelectionSort(arr)
+    setData(await SelectionSort(arr)); 
   }
 
   function swap(arr:number[], x:number, y:number){
@@ -65,35 +58,35 @@ export default function App() {
     arr[x] = arr[y]
     arr[y] = temp
   }
+
   const delay = (ms: number | undefined) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
   async function SelectionSort(arr:IMyData[]): Promise<IMyData[]>{
-    const copy = [...arr]
-    let n = arr.length
-    
-    for(let i = 0; i < n; i++){
-      let min = i;
-      //setSelected(i)
+      let n = arr.length
       
-      for(let j = i + 1; j < n; j++){
-        await delay(1);
-        setSelected(j)
-        if (copy[j].num < copy[min].num){
-          min = j;
+      for(let i = 0; i < n; i++){
+        let min = i;
+        //setSelected(i)
+        
+        for(let j = i + 1; j < n; j++){
+          await delay(1);
+          setSelected(j)
+          if (arr[j].num < arr[min].num){
+            min = j;
+          }
         }
+        if( min != i){
+            let temp = arr[i].num
+            arr[i].num = arr[min].num
+            arr[min].num = temp
+            setSorted(i)
+          }
       }
-      if( min != i){
-          let temp = copy[i].num
-          copy[i].num = copy[min].num
-          copy[min].num = temp
-          setSorted(i)
-        }
+      console.log("New Array")
+      console.log(arr)
+      return arr
     }
-    console.log("New Array")
-    console.log(copy)
-    return copy
-  }
-  let colors = ["#8884d8", "#36DA36","#2036EA", "#E74418"]
-  //<Cell fill= { data[index] === data[selected] ? '#290a0a' : '#005599' }/>
+ 
 
   function checkColor(index:number){
     if(data[index]===data[selected]){
@@ -108,7 +101,14 @@ export default function App() {
   return (
     <>
     <div> How Many Numbers?
-   <input ref={textRef} type="text"></input> <input type="button" value="Click Here" onClick={getNumber}></input><button onClick={() => sortGraph(data)} >Sort Data</button>  </div>
+   <input ref={textRef} type="text"></input> <input type="button" value="Click Here" onClick={getNumber}></input>
+   <button onClick={() => SelectionSort(data)} >Start Selection Sort</button>  
+   <button onClick={() => sortGraph(data)} >Start Bubble Sort</button>
+   <button onClick={() => sortGraph(data)} >Start Insertion Sort</button>
+   <button onClick={() => sortGraph(data)} >Start Merge Sort</button>
+   <button onClick={() => sortGraph(data)} >Start Quick Sort</button>
+   <button onClick={() => sortGraph(data)} >Start Heap Sort</button>
+   </div>
     
 
   <BarChart width={730} height={250} data={data}>
@@ -120,9 +120,6 @@ export default function App() {
     <Bar dataKey="num" > {
       data.map((entry, index) => (
         <Cell fill= {checkColor(index)}/>
-        
-        
-        
       ))
     }</Bar>
   </BarChart>
