@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+Test site available at https://algovisualizer2022.herokuapp.com/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
